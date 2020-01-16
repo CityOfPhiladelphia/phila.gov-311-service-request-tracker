@@ -1,3 +1,4 @@
+
 <template>
   <div class="widget">
     <p>You can use this tool to track the status of your 311 service request.</p>
@@ -11,7 +12,13 @@
         type="text"
         placeholder="Search by document name or meeting number"
       />
-      <input ref="request-search-bar" type="submit" class="search-submit" value="Search" />
+      <input 
+        ref="request-search-bar" 
+        type="submit" 
+        class="search-submit" 
+        value="Search" 
+        @click="requestData"
+      />
       <button
         v-if="serviceRequestNumber.length > 0"
         class="clear-search-btn"
@@ -21,19 +28,47 @@
       </button>
     </div>
 
-    <div v-if="serviceRequestData" class="service-request-data"></div>
+    <div v-if="serviceRequestData" class="service-request-data">
+       <table role="grid" class="responsive">
+        <thead>
+        
+        </thead>
+        <tbody>
+          <tr>
+          <th scope="row">Type</th>
+          <td>{{ serviceRequestData.service_name }}</td>
+          </tr>
+           <tr>
+          <th scope="row">Status</th>
+          <td>{{ serviceRequestData.status }}</td>
+           </tr>
+           <tr>
+          <th scope="row">Department</th>
+
+          
+           <td>{{ serviceRequestData.agency_responsible }}</td>
+           </tr>
+           <tr>
+          <th scope="row">Resolution</th>
+          <td>{{ serviceRequestData.status_notes }}</td> 
+          </tr>
+        
+      </tbody>
+      </table>
+    </div>
   </div>
 </template>
 <script>
+/* eslint-disable no-console */
 import axios from "axios";
-const endpoint = "http://api.phila.gov/open311/v2/requests/";
+const endpoint = "https://api.phila.gov/open311/v2/requests/";
 
 export default {
   name: "ServiceRequestTracker",
   data: function() {
     return {
       serviceRequestNumber: "13075315",
-      serviceRequestData: [{}],
+      serviceRequestData: null,
       requested: false,
       wrongNumber: false,
       loading: false
@@ -45,10 +80,13 @@ export default {
     }
   },
   methods: {
-    update() {},
+    update() {
+      console.log("updated!");
+    },
 
     clearSearchBar() {
       this.serviceRequestNumber = "";
+      this.serviceRequestData = null;
     },
 
     requestData() {
@@ -58,7 +96,7 @@ export default {
       axios
         .get(reqUrl)
         .then(response => {
-          this.serviceRequestData = response.data;
+          this.serviceRequestData = response.data[0];
           this.loading = false;
         })
         .catch(e => {
@@ -68,7 +106,7 @@ export default {
     }
   },
   created: function() {
-    this.requestData();
+    // this.requestData();
   }
 };
 </script>
