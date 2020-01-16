@@ -1,60 +1,105 @@
 
 <template>
   <div class="widget">
-    <p>You can use this tool to track the status of your 311 service request.</p>
-
+    <h1 class="contrast">Philly311 service request tracker</h1>
+    <h3>You can use this tool to track the status of your 311 service request.</h3>
+    <ul>
+      <li>13092209</li>
+      <li>13075315</li>
+      <li>10901544</li>
+      <li>13092150</li>
+    </ul>
+    <label for="service-search">Type in your service request number.</label>
     <div class="search">
-      Type in your service request number.
       <input
+        name="service-search"
         id="search-bar"
         v-model="serviceRequestNumber"
         class="search-field"
-        type="text"
-        placeholder="Search by document name or meeting number"
+        type="number"
+        placeholder="For example: 10901544"
+        @keyup.enter="requestData()"
       />
-      <input 
-        ref="request-search-bar" 
-        type="submit" 
-        class="search-submit" 
-        value="Search" 
-        @click="requestData"
+      <input
+        ref="request-search-bar"
+        type="submit"
+        class="search-submit"
+        value="Search"
+        @click="requestData()"
       />
       <button
         v-if="serviceRequestNumber.length > 0"
         class="clear-search-btn"
-        @click="clearSearchBar"
+        @click="clearSearchBar()"
       >
         <i class="fas fa-times" />
       </button>
     </div>
-
-    <div v-if="serviceRequestData" class="service-request-data">
-       <table role="grid" class="responsive">
-        <thead>
-        
-        </thead>
+    <div v-if="wrongNumber && !loading">
+      <h4>Please type in a valid service request number.</h4>
+    </div>
+    <div
+      v-if="loading"
+      class="mtm center"
+    >
+      <i class="fas fa-spinner fa-spin fa-3x" />
+    </div>
+    <div v-if="serviceRequestData && !wrongNumber && !loading" id="service-request-data">
+      <h3>Service request #{{ serviceRequestData.service_request_id }}.</h3>
+      <table role="grid">
+        <thead></thead>
         <tbody>
           <tr>
-          <th scope="row">Type</th>
-          <td>{{ serviceRequestData.service_name }}</td>
+            <th scope="row">Type</th>
+            <td>{{ serviceRequestData.service_name }}</td>
           </tr>
-           <tr>
-          <th scope="row">Status</th>
-          <td>{{ serviceRequestData.status }}</td>
-           </tr>
-           <tr>
-          <th scope="row">Department</th>
+          <tr>
+            <th scope="row">Status</th>
+            <td>{{ serviceRequestData.status | capitalize }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Department</th>
 
-          
-           <td>{{ serviceRequestData.agency_responsible }}</td>
-           </tr>
-           <tr>
-          <th scope="row">Resolution</th>
-          <td>{{ serviceRequestData.status_notes }}</td> 
+            <td>{{ serviceRequestData.agency_responsible }}</td>
           </tr>
-        
-      </tbody>
+          <tr>
+            <th scope="row">Resolution</th>
+            <td>{{ serviceRequestData.status_notes }}</td>
+          </tr>
+        </tbody>
       </table>
+
+      <p>
+        Please email
+        <a href="mailto:philly311@phila.gov">philly311@phila.gov</a> if you have an issue or question about the status of your request.
+      </p>
+    </div>
+
+    <div class="row">
+      <div class="columns">
+        <section class="tertiary-content">
+          <h3>Related content</h3>
+          <div class="phm-mu">
+            <ul>
+              <li>
+                <a href="https://www.phila.gov/departments/philly311/">Philly311 contact information</a>
+              </li>
+              <li>
+                <a
+                  class="external"
+                  href="http://iframe.publicstuff.com/#?client_id=242"
+                >Submit a Philly311 service request</a>
+              </li>
+              <li>
+                <a
+                  class="external"
+                  href="https://twitter.com/philly311"
+                >Tweet @philly311 for a quick response</a>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
     </div>
   </div>
 </template>
@@ -67,12 +112,19 @@ export default {
   name: "ServiceRequestTracker",
   data: function() {
     return {
-      serviceRequestNumber: "13075315",
+      serviceRequestNumber: "",
       serviceRequestData: null,
-      requested: false,
       wrongNumber: false,
       loading: false
     };
+  },
+
+  filters: {
+    capitalize: function(value) {
+      if (!value) return "";
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
   },
   watch: {
     serviceRequestData(objArr) {
@@ -82,11 +134,12 @@ export default {
   methods: {
     update() {
       console.log("updated!");
+      //ADD TO ROUTER QUERy/
     },
 
     clearSearchBar() {
       this.serviceRequestNumber = "";
-      this.serviceRequestData = null;
+      // this.serviceRequestData = null;
     },
 
     requestData() {
@@ -98,9 +151,11 @@ export default {
         .then(response => {
           this.serviceRequestData = response.data[0];
           this.loading = false;
+          this.wrongNumber = false;
         })
         .catch(e => {
           this.wrongNumber = true;
+          this.serviceRequestData = null;
           window.console.log(e);
         });
     }
@@ -118,7 +173,7 @@ export default {
   margin: 0 auto;
 }
 
-.search-wrapper {
+.search {
   padding-bottom: 1rem;
 
   .clear-search-btn {
@@ -133,25 +188,9 @@ export default {
     cursor: pointer;
     color: rgba(60, 60, 60, 0.5);
   }
+}
 
-  .clear-button-wrap {
-    height: 50%;
-    float: right;
-
-    button {
-      margin-left: 10px;
-    }
-
-    .clear-button {
-      background-color: transparent;
-      text-decoration: underline;
-      color: black;
-      //color: white;
-      &:hover {
-        background-color: transparent;
-        color: grey;
-      }
-    }
-  }
+th {
+  width: 100px;
 }
 </style>

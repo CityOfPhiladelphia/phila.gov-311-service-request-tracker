@@ -1,19 +1,18 @@
 <template>
-  <div id="app">
-   
+  <div id="vue-app">
     <ServiceRequestTracker />
   </div>
 </template>
 
 <script>
-import ServiceRequestTracker from './components/ServiceRequestTracker.vue'
+import ServiceRequestTracker from "./components/ServiceRequestTracker.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     ServiceRequestTracker
   }
-}
+};
 </script>
 
 <style>
