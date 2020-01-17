@@ -1,14 +1,13 @@
 
 <template>
   <div class="widget">
-    <h1 class="contrast">Philly311 service request tracker</h1>
     <h3>You can use this tool to track the status of your 311 service request.</h3>
     <label for="service-search">Enter your 8-digit service request number.</label>
     <div class="search">
       <input
         name="service-search"
         id="search-bar"
-        v-model.number="serviceRequestID"
+        v-model.number="id"
         class="search-field"
         type="number"
         maxlength="8"
@@ -23,14 +22,14 @@
         @click="requestData()"
       />
       <button
-        v-if="serviceRequestID"
+        v-if="id"
         class="clear-search-btn"
         @click="clearSearchBar()"
       >
         <i class="fas fa-times" />
       </button>
     </div>
-    <div v-if="wrongNumber && !loading">
+    <div v-if="failure && !loading">
       <h4>Please enter a valid service request number.</h4>
     </div>
     <div
@@ -39,7 +38,7 @@
     >
       <i class="fas fa-spinner fa-spin fa-3x" />
     </div>
-    <div v-if="serviceRequestData && !wrongNumber && !loading" id="service-request-data">
+    <div v-if="serviceRequestData && !failure && !loading" id="service-request-data">
       <h3>Service request #{{ serviceRequestData.service_request_id }}</h3>
       <table role="grid">
         <thead></thead>
@@ -68,10 +67,10 @@
       </table>
       <p>
         Please email
-        <a href="mailto:philly311@phila.gov">philly311@phila.gov</a> if you have an issue or question about the status of your request.
+        <a href="mailto:philly311@phila.gov">philly311@phila.gov</a> 
+        if you have an issue or question about the status of your request.
       </p>
     </div>
-
     <div class="row">
       <div class="columns">
         <section class="tertiary-content">
@@ -79,19 +78,25 @@
           <div class="phm-mu">
             <ul>
               <li>
-                <a href="https://www.phila.gov/departments/philly311/">Philly311 contact information</a>
+                <a href="https://www.phila.gov/departments/philly311/">
+                  Philly311 contact information
+                </a>
               </li>
               <li>
                 <a
                   class="external"
                   href="https://iframe.publicstuff.com/#?client_id=242"
-                >Submit a Philly311 service request</a>
+                >
+                  Submit a Philly311 service request
+                </a>
               </li>
               <li>
                 <a
                   class="external"
                   href="https://twitter.com/philly311"
-                >Tweet @philly311 for a quick response</a>
+                >
+                  Tweet @philly311 for a quick response
+                </a>
               </li>
             </ul>
           </div>
@@ -101,7 +106,7 @@
   </div>
 </template>
 <script>
-/* eslint-disable no-console */
+
 import Vue from 'vue';
 import axios from "axios";
 import moment from "moment";
@@ -113,9 +118,9 @@ export default {
   name: "ServiceRequestTracker",
   data: function() {
     return {
-      serviceRequestID: '',
+      id: '',
       serviceRequestData: null,
-      wrongNumber: false,
+      failure: false,
       loading: false,
       routerQuery: {},
     };
@@ -141,14 +146,14 @@ export default {
     },
 
     serviceRequestData() {
-      if (this.serviceRequestID){
-        this.updateRouterQuery('serviceRequestID', this.serviceRequestID);
+      if (this.id){
+        this.updateRouterQuery('id', this.id);
       } else {
-        this.updateRouterQuery('serviceRequestID', null);
+        this.updateRouterQuery('id', null);
       }
     },
 
-    serviceRequestID(val) {
+    id(val) {
       if (val.length == 8) {
         this.requestData();
       }
@@ -185,22 +190,22 @@ export default {
     },
 
     clearSearchBar() {
-      this.serviceRequestID = "";
+      this.id = "";
     },
 
     requestData() {
       this.loading = true;
-      let reqUrl = endpoint + this.serviceRequestID + ".json";
+      let reqUrl = endpoint + this.id + ".json";
 
       axios
         .get(reqUrl)
         .then(response => {
           this.serviceRequestData = response.data[0];
           this.loading = false;
-          this.wrongNumber = false;
+          this.failure = false;
         })
         .catch(e => {
-          this.wrongNumber = true;
+          this.failure = true;
           this.loading = false;
           this.serviceRequestData = null;
           window.console.log(e);
@@ -215,7 +220,7 @@ export default {
 
 <style lang="scss">
 .widget {
-  width: 50rem;
+  max-width: 50rem;
   margin: 0 auto;
 }
 

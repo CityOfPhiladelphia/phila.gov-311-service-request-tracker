@@ -6,8 +6,6 @@ Vue.config.productionTip = false
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-  mode: "",
-  base: "",
   routes: [
     {
       path: '/',
