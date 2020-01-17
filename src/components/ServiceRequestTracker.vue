@@ -3,13 +3,7 @@
   <div class="widget">
     <h1 class="contrast">Philly311 service request tracker</h1>
     <h3>You can use this tool to track the status of your 311 service request.</h3>
-    <ul>
-      <li>13092209</li>
-      <li>13075315</li>
-      <li>10901544</li>
-      <li>13092150</li>
-    </ul>
-    <label for="service-search">Type in your service request number.</label>
+    <label for="service-search">Enter your 8-digit service request number.</label>
     <div class="search">
       <input
         name="service-search"
@@ -17,7 +11,7 @@
         v-model="serviceRequestNumber"
         class="search-field"
         type="number"
-        placeholder="For example: 10901544"
+        placeholder="For example: 10808044"
         @keyup.enter="requestData()"
       />
       <input
@@ -36,7 +30,7 @@
       </button>
     </div>
     <div v-if="wrongNumber && !loading">
-      <h4>Please type in a valid service request number.</h4>
+      <h4>Please enter a valid service request number.</h4>
     </div>
     <div
       v-if="loading"
@@ -45,7 +39,7 @@
       <i class="fas fa-spinner fa-spin fa-3x" />
     </div>
     <div v-if="serviceRequestData && !wrongNumber && !loading" id="service-request-data">
-      <h3>Service request #{{ serviceRequestData.service_request_id }}.</h3>
+      <h3>Service request #{{ serviceRequestData.service_request_id }}</h3>
       <table role="grid">
         <thead></thead>
         <tbody>
@@ -54,12 +48,15 @@
             <td>{{ serviceRequestData.service_name }}</td>
           </tr>
           <tr>
+            <th scope="row">Date submitted</th>
+            <td>{{ serviceRequestData.requested_datetime | dateDisplay }}</td>
+          </tr>
+          <tr>
             <th scope="row">Status</th>
             <td>{{ serviceRequestData.status | capitalize }}</td>
           </tr>
           <tr>
             <th scope="row">Department</th>
-
             <td>{{ serviceRequestData.agency_responsible }}</td>
           </tr>
           <tr>
@@ -105,7 +102,11 @@
 </template>
 <script>
 /* eslint-disable no-console */
+import Vue from 'vue';
 import axios from "axios";
+import moment from "moment";
+Vue.use(moment);
+
 const endpoint = "https://api.phila.gov/open311/v2/requests/";
 
 export default {
@@ -124,7 +125,13 @@ export default {
       if (!value) return "";
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
-    }
+    },
+
+    dateDisplay: function(val) {
+      // var year =  moment().year(); //get current year
+      let parsedDate =  moment(val);
+      return parsedDate.format("MMMM D, YYYY") ;
+    },
   },
   watch: {
     serviceRequestData(objArr) {
@@ -155,6 +162,7 @@ export default {
         })
         .catch(e => {
           this.wrongNumber = true;
+          this.loading = false;
           this.serviceRequestData = null;
           window.console.log(e);
         });
@@ -191,6 +199,6 @@ export default {
 }
 
 th {
-  width: 100px;
+  width: 150px;
 }
 </style>
