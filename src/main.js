@@ -1,8 +1,25 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'vue';
+import App from './App.vue';
+import VueRouter from 'vue-router';
 
 Vue.config.productionTip = false
+Vue.use(VueRouter);
 
-new Vue({
-  render: h => h(App),
-}).$mount('#vue-app')
+const router = new VueRouter({
+  mode: "",
+  base: "",
+  routes: [
+    {
+      path: '/',
+      name: 'main',
+    },
+  ],
+});
+
+new Vue({ // eslint-disable-line no-new
+  el: '#vue-app',
+  router,
+  render (h) {
+    return h(App, {});
+  },
+});

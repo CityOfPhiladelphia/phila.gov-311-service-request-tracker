@@ -8,9 +8,10 @@
       <input
         name="service-search"
         id="search-bar"
-        v-model="serviceRequestNumber"
+        v-model.number="serviceRequestID"
         class="search-field"
         type="number"
+        maxlength="8"
         placeholder="For example: 10808044"
         @keyup.enter="requestData()"
       />
@@ -22,7 +23,7 @@
         @click="requestData()"
       />
       <button
-        v-if="serviceRequestNumber.length > 0"
+        v-if="serviceRequestID"
         class="clear-search-btn"
         @click="clearSearchBar()"
       >
@@ -112,10 +113,11 @@ export default {
   name: "ServiceRequestTracker",
   data: function() {
     return {
-      serviceRequestNumber: "",
+      serviceRequestID: '',
       serviceRequestData: null,
       wrongNumber: false,
-      loading: false
+      loading: false,
+      routerQuery: {},
     };
   },
 
@@ -127,30 +129,68 @@ export default {
     },
 
     dateDisplay: function(val) {
-      // var year =  moment().year(); //get current year
-      let parsedDate =  moment(val);
-      return parsedDate.format("MMMM D, YYYY") ;
+      return moment(val).format("MMMM D, YYYY") ;
     },
   },
   watch: {
-    serviceRequestData(objArr) {
-      this.update(objArr);
+    routerQuery: {
+      handler: function () {
+        this.updateRouter();
+      },
+      deep: true,
+    },
+
+    serviceRequestData() {
+      if (this.serviceRequestID){
+        this.updateRouterQuery('serviceRequestID', this.serviceRequestID);
+      } else {
+        this.updateRouterQuery('serviceRequestID', null);
+      }
+    },
+
+    serviceRequestID(val) {
+      if (val.length == 8) {
+        this.requestData();
+      }
     }
+
   },
   methods: {
-    update() {
-      console.log("updated!");
-      //ADD TO ROUTER QUERy/
+    updateRouterQuery: function (key, value) {
+      if (!value) {
+        Vue.delete(this.routerQuery, key);
+      } else {
+        Vue.set(this.routerQuery, key, value);
+      }
+    },
+
+    updateRouter: function () {
+      if (this.routerQuery  === this.$route.query) {
+        return;
+      } 
+      this.$router.push({
+        name: 'main',
+        query: this.routerQuery,
+      }).catch(e => {
+        window.console.log(e);
+      });
+    },
+
+    init: function() {
+      if (Object.keys(this.$route.query).length !== 0) {
+        for (let routerKey in this.$route.query) {
+          Vue.set(this, routerKey, this.$route.query[routerKey]);
+        }
+      }
     },
 
     clearSearchBar() {
-      this.serviceRequestNumber = "";
-      // this.serviceRequestData = null;
+      this.serviceRequestID = "";
     },
 
     requestData() {
       this.loading = true;
-      let reqUrl = endpoint + this.serviceRequestNumber + ".json";
+      let reqUrl = endpoint + this.serviceRequestID + ".json";
 
       axios
         .get(reqUrl)
@@ -168,12 +208,11 @@ export default {
     }
   },
   created: function() {
-    // this.requestData();
+   this.init()
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 .widget {
   width: 50rem;
