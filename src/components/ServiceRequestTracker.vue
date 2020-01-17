@@ -65,7 +65,6 @@
           </tr>
         </tbody>
       </table>
-
       <p>
         Please email
         <a href="mailto:philly311@phila.gov">philly311@phila.gov</a> if you have an issue or question about the status of your request.
@@ -84,7 +83,7 @@
               <li>
                 <a
                   class="external"
-                  href="http://iframe.publicstuff.com/#?client_id=242"
+                  href="https://iframe.publicstuff.com/#?client_id=242"
                 >Submit a Philly311 service request</a>
               </li>
               <li>
