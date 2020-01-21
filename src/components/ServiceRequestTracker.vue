@@ -55,6 +55,10 @@
             <th scope="row">Status</th>
             <td>{{ serviceRequestData.status | capitalize }}</td>
           </tr>
+           <tr v-if="serviceRequestData.address">
+            <th scope="row">Location</th>
+            <td>{{ serviceRequestData.address }}</td>
+          </tr>
           <tr>
             <th scope="row">Department</th>
             <td>{{ serviceRequestData.agency_responsible }}</td>
@@ -195,11 +199,12 @@ export default {
 
     requestData() {
       this.loading = true;
-      let reqUrl = endpoint + this.id + ".json";
+      let reqUrl = endpoint + this.id +".json";
 
       axios
         .get(reqUrl)
         .then(response => {
+          console.log(response.data)
           this.serviceRequestData = response.data[0];
           this.loading = false;
           this.failure = false;
