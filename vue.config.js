@@ -1,4 +1,4 @@
 module.exports = {
   filenameHashing: false,
-  // publicPath: "/thelatest-archive/staging/",
+  publicPath: "/311-service-request-tracker/",
 };
