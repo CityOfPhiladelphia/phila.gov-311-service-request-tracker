@@ -204,7 +204,7 @@ export default {
       axios
         .get(reqUrl)
         .then(response => {
-          console.log(response.data)
+          // console.log(response.data)
           this.serviceRequestData = response.data[0];
           this.loading = false;
           this.failure = false;
