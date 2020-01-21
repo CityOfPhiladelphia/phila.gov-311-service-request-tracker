@@ -75,38 +75,6 @@
         if you have an issue or question about the status of your request.
       </p>
     </div>
-    <div class="row">
-      <div class="columns">
-        <section class="tertiary-content">
-          <h3>Related content</h3>
-          <div class="phm-mu">
-            <ul>
-              <li>
-                <a href="https://www.phila.gov/departments/philly311/">
-                  Philly311 contact information
-                </a>
-              </li>
-              <li>
-                <a
-                  class="external"
-                  href="https://iframe.publicstuff.com/#?client_id=242"
-                >
-                  Submit a Philly311 service request
-                </a>
-              </li>
-              <li>
-                <a
-                  class="external"
-                  href="https://twitter.com/philly311"
-                >
-                  Tweet @philly311 for a quick response
-                </a>
-              </li>
-            </ul>
-          </div>
-        </section>
-      </div>
-    </div>
   </div>
 </template>
 <script>
@@ -199,7 +167,7 @@ export default {
 
     requestData() {
       this.loading = true;
-      let reqUrl = endpoint + this.id +".json";
+      let reqUrl = endpoint + this.id + ".json";
 
       axios
         .get(reqUrl)
