@@ -35,7 +35,7 @@
       <div class="row">
         <div class="columns">
           <section class="tertiary-content">
-            <h3>Service request #{{ serviceRequestData.service_request_id }}</h3>
+            <h3 class="service-id">Service request #{{ serviceRequestData.service_request_id }}</h3>
             <div class="mlm">
               <strong>Type</strong>
               <p>{{ serviceRequestData.service_name }}</p>
@@ -217,7 +217,7 @@ export default {
   margin: 10px;
 }
 
-// th {
-//   width: 150px;
-// }
+.service-id {
+  margin-top: 0px !important;
+}
 </style>
