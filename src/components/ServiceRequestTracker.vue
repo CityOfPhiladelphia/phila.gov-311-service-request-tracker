@@ -21,65 +21,63 @@
         value="Search"
         @click="requestData()"
       />
-      <button
-        v-if="id"
-        class="clear-search-btn"
-        @click="clearSearchBar()"
-      >
+      <button v-if="id" class="clear-search-btn" @click="clearSearchBar()">
         <i class="fas fa-times" />
       </button>
     </div>
     <div v-if="failure && !loading">
-      <h4>Please enter a valid service request number.</h4>
+      <strong>Please enter a valid service request number.</strong>
     </div>
-    <div
-      v-if="loading"
-      class="mtm center"
-    >
+    <div v-if="loading" class="mtm center">
       <i class="fas fa-spinner fa-spin fa-3x" />
     </div>
     <div v-if="serviceRequestData && !failure && !loading" id="service-request-data">
-      <h3>Service request #{{ serviceRequestData.service_request_id }}</h3>
-      <table role="grid">
-        <thead></thead>
-        <tbody>
-          <tr>
-            <th scope="row">Type</th>
-            <td>{{ serviceRequestData.service_name }}</td>
-          </tr>
-          <tr>
-            <th scope="row">Date submitted</th>
-            <td>{{ serviceRequestData.requested_datetime | dateDisplay }}</td>
-          </tr>
-          <tr>
-            <th scope="row">Status</th>
-            <td>{{ serviceRequestData.status | capitalize }}</td>
-          </tr>
-           <tr v-if="serviceRequestData.address">
-            <th scope="row">Location</th>
-            <td>{{ serviceRequestData.address }},  {{ serviceRequestData.zipcode }}</td>
-          </tr>
-          <tr>
-            <th scope="row">Department</th>
-            <td>{{ serviceRequestData.agency_responsible }}</td>
-          </tr>
-          <tr>
-            <th scope="row">Resolution</th>
-            <td>{{ serviceRequestData.status_notes }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="row">
+        <div class="columns">
+          <section class="tertiary-content">
+            <h3>Service request #{{ serviceRequestData.service_request_id }}</h3>
+            <div class="mlm">
+              <strong>Type</strong>
+              <p>{{ serviceRequestData.service_name }}</p>
+            </div>
+            <hr class="small-hr" />
+            <div class="mlm">
+              <strong>Date requested</strong>
+              <p>{{ serviceRequestData.requested_datetime | dateDisplay }}</p>
+            </div>
+            <hr class="small-hr" />
+            <div class="mlm">
+              <strong>Status</strong>
+              <p>{{ serviceRequestData.status | capitalize }}</p>
+            </div>
+            <hr class="small-hr" />
+            <div v-if="serviceRequestData.address" class="mlm">
+              <strong>Address</strong>
+              <p>{{ serviceRequestData.address }}, {{ serviceRequestData.zipcode }}</p>
+            </div>
+            <hr class="small-hr" v-if="serviceRequestData.address" />
+            <div class="mlm">
+              <strong>Department</strong>
+              <p>{{ serviceRequestData.agency_responsible }}</p>
+            </div>
+            <hr v-if="serviceRequestData.status_notes" class="small-hr" />
+            <div v-if="serviceRequestData.status_notes" class="mlm">
+              <strong>Resolution</strong>
+              <p>{{ serviceRequestData.status_notes }}</p>
+            </div>
+          </section>
+        </div>
+      </div>
       <!-- <p>
         Please email
         <a href="mailto:philly311@phila.gov">philly311@phila.gov</a> 
         if you have an issue or question about the status of your request.
-      </p> -->
+      </p>-->
     </div>
   </div>
 </template>
 <script>
-
-import Vue from 'vue';
+import Vue from "vue";
 import axios from "axios";
 import moment from "moment";
 Vue.use(moment);
@@ -90,11 +88,11 @@ export default {
   name: "ServiceRequestTracker",
   data: function() {
     return {
-      id: '',
+      id: "",
       serviceRequestData: null,
       failure: false,
       loading: false,
-      routerQuery: {},
+      routerQuery: {}
     };
   },
 
@@ -106,22 +104,22 @@ export default {
     },
 
     dateDisplay: function(val) {
-      return moment(val).format("MMMM D, YYYY") ;
-    },
+      return moment(val).format("MMMM D, YYYY");
+    }
   },
   watch: {
     routerQuery: {
-      handler: function () {
+      handler: function() {
         this.updateRouter();
       },
-      deep: true,
+      deep: true
     },
 
     serviceRequestData() {
-      if (this.id){
-        this.updateRouterQuery('id', this.id);
+      if (this.id) {
+        this.updateRouterQuery("id", this.id);
       } else {
-        this.updateRouterQuery('id', null);
+        this.updateRouterQuery("id", null);
       }
     },
 
@@ -130,10 +128,9 @@ export default {
         this.requestData();
       }
     }
-
   },
   methods: {
-    updateRouterQuery: function (key, value) {
+    updateRouterQuery: function(key, value) {
       if (!value) {
         Vue.delete(this.routerQuery, key);
       } else {
@@ -141,16 +138,18 @@ export default {
       }
     },
 
-    updateRouter: function () {
-      if (this.routerQuery  === this.$route.query) {
+    updateRouter: function() {
+      if (this.routerQuery === this.$route.query) {
         return;
-      } 
-      this.$router.push({
-        name: 'main',
-        query: this.routerQuery,
-      }).catch(e => {
-        window.console.log(e);
-      });
+      }
+      this.$router
+        .push({
+          name: "main",
+          query: this.routerQuery
+        })
+        .catch(e => {
+          window.console.log(e);
+        });
     },
 
     init: function() {
@@ -186,7 +185,7 @@ export default {
     }
   },
   created: function() {
-   this.init()
+    this.init();
   }
 };
 </script>
@@ -214,7 +213,11 @@ export default {
   }
 }
 
-th {
-  width: 150px;
+.small-hr {
+  margin: 10px;
 }
+
+// th {
+//   width: 150px;
+// }
 </style>
