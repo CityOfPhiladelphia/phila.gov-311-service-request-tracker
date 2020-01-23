@@ -1,7 +1,7 @@
 
 <template>
   <div class="widget">
-    <h3>You can use this tool to track the status of your 311 service request.</h3>
+    <!-- <h3>You can use this tool to track the status of your 311 service request.</h3> -->
     <label for="service-search">Enter your 8-digit service request number.</label>
     <div class="search">
       <input
@@ -57,7 +57,7 @@
           </tr>
            <tr v-if="serviceRequestData.address">
             <th scope="row">Location</th>
-            <td>{{ serviceRequestData.address }}</td>
+            <td>{{ serviceRequestData.address }},  {{ serviceRequestData.zipcode }}</td>
           </tr>
           <tr>
             <th scope="row">Department</th>
@@ -69,11 +69,11 @@
           </tr>
         </tbody>
       </table>
-      <p>
+      <!-- <p>
         Please email
         <a href="mailto:philly311@phila.gov">philly311@phila.gov</a> 
         if you have an issue or question about the status of your request.
-      </p>
+      </p> -->
     </div>
   </div>
 </template>
