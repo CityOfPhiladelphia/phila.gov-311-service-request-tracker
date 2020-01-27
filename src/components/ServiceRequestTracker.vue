@@ -1,7 +1,6 @@
 
 <template>
   <div class="widget">
-    <!-- <h3>You can use this tool to track the status of your 311 service request.</h3> -->
     <label for="service-search">Enter your 8-digit service request number.</label>
     <div class="search">
       <input
@@ -68,11 +67,6 @@
           </section>
         </div>
       </div>
-      <!-- <p>
-        Please email
-        <a href="mailto:philly311@phila.gov">philly311@phila.gov</a> 
-        if you have an issue or question about the status of your request.
-      </p>-->
     </div>
   </div>
 </template>
@@ -125,6 +119,7 @@ export default {
 
     id(val) {
       if (val.length == 8) {
+        // this.updateRouterQuery("id", val);
         this.requestData();
       }
     }
@@ -139,7 +134,7 @@ export default {
     },
 
     updateRouter: function() {
-      if (this.routerQuery === this.$route.query) {
+      if (this.routerQuery.id == this.$route.query.id) {
         return;
       }
       this.$router
@@ -173,6 +168,8 @@ export default {
         .then(response => {
           // console.log(response.data)
           this.serviceRequestData = response.data[0];
+          this.init()
+
           this.loading = false;
           this.failure = false;
         })
@@ -184,7 +181,7 @@ export default {
         });
     }
   },
-  created: function() {
+  mounted: function() {
     this.init();
   }
 };
@@ -220,4 +217,5 @@ export default {
 .service-id {
   margin-top: 0px !important;
 }
+
 </style>
