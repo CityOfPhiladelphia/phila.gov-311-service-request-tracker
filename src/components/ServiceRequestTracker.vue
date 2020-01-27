@@ -211,7 +211,7 @@ export default {
 }
 
 .small-hr {
-  margin: 10px;
+  margin: 17px 10px;
 }
 
 .service-id {
