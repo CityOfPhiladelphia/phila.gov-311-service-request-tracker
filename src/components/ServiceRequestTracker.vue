@@ -8,8 +8,9 @@
         id="search-bar"
         v-model.number="id"
         class="search-field"
-        type="number"
-        maxlength="8"
+        pattern="\d*"
+        type="text"
+        maxlength=8
         placeholder="For example: 10808044"
         @keyup.enter="requestData()"
       />
@@ -25,7 +26,7 @@
       </button>
     </div>
     <div v-if="failure && !loading">
-      <strong>Please enter a valid service request number.</strong>
+      <strong class="error-message">The service request number you entered is invalid.</strong>
     </div>
     <div v-if="loading" class="mtm center">
       <i class="fas fa-spinner fa-spin fa-3x" />
@@ -119,9 +120,9 @@ export default {
 
     id(val) {
       if (val.length == 8) {
-        // this.updateRouterQuery("id", val);
         this.requestData();
       }
+      this.id = val.replace(/[^0-9]+/g, ''); 
     }
   },
   methods: {
@@ -166,10 +167,7 @@ export default {
       axios
         .get(reqUrl)
         .then(response => {
-          // console.log(response.data)
           this.serviceRequestData = response.data[0];
-          this.init()
-
           this.loading = false;
           this.failure = false;
         })
@@ -216,6 +214,10 @@ export default {
 
 .service-id {
   margin-top: 0px !important;
+}
+
+.error-message {
+  color: #cc3000;
 }
 
 </style>
