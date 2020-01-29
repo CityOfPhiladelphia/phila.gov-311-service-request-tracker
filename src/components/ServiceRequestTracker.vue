@@ -36,26 +36,26 @@
         <div class="columns">
           <section class="tertiary-content">
             <h3 class="service-id">Service request #{{ serviceRequestData.service_request_id }}</h3>
-            <div class="mlm">
-              <strong>Type</strong>
-              <p>{{ serviceRequestData.service_name }}</p>
-            </div>
-            <hr class="small-hr" />
-            <div class="mlm">
-              <strong>Date requested</strong>
-              <p>{{ serviceRequestData.requested_datetime | dateDisplay }}</p>
-            </div>
-            <hr class="small-hr" />
-            <div class="mlm">
+             <div class="mlm">
               <strong>Status</strong>
               <p>{{ serviceRequestData.status | capitalize }}</p>
+            </div>
+            <hr class="small-hr" />
+             <div class="mlm">
+              <strong>Date requested</strong>
+              <p>{{ serviceRequestData.requested_datetime | dateDisplay }}</p>
             </div>
             <hr class="small-hr" />
             <div v-if="serviceRequestData.address" class="mlm">
               <strong>Address</strong>
               <p>{{ serviceRequestData.address }}, {{ serviceRequestData.zipcode }}</p>
             </div>
-            <hr class="small-hr" v-if="serviceRequestData.address" />
+            <hr class="small-hr" v-if="serviceRequestData.address" />   
+            <div class="mlm">
+              <strong>Type</strong>
+              <p>{{ serviceRequestData.service_name }}</p>
+            </div>
+            <hr class="small-hr" />
             <div class="mlm">
               <strong>Department</strong>
               <p>{{ serviceRequestData.agency_responsible }}</p>
