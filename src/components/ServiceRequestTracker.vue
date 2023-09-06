@@ -26,7 +26,7 @@
       </button>
     </div>
     <div v-if="failure && !loading">
-      <strong class="error-message">The service request number you entered is invalid.</strong>
+      <strong class="error-message">This service request number was not found. If you marked your initial request as private, you won't be able to track it using this tool. Call 311 for an update on private tickets.</strong>
     </div>
     <div v-if="loading" class="mtm center">
       <i class="fas fa-spinner fa-spin fa-3x" />
