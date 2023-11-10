@@ -1,8 +1,8 @@
-name: Deploy main to s3
+name: Deploy staging to s3
 on:
   push:
     branches:
-      - main
+      - staging
 jobs:
   build:
     name: Build files
@@ -24,4 +24,4 @@ jobs:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: 
-          aws s3 cp dist s3://philagov-vue-apps/311-service-request-tracker --recursive # change it
+          aws s3 cp dist s3://philagov-vue-apps/311-service-request-tracker/staging --recursive # change it
