@@ -48,7 +48,7 @@
           <section class="tertiary-content">
           <div class="search-input">
             <input class="clear-label"
-            value="clear"
+            value="Clear"
             @click="clearSearchBar()"
             >
             <div class="service-request-label">
@@ -215,12 +215,13 @@ export default {
 }
 
 .search-input{
-      height: 89px;
+      padding: 24px 0 24px 0;
       width: 100%;
       background-color: #daedfe;
+      margin-bottom: 24px;
     }
   .service-request-label {
-      padding: 24px 0 0 24px;
+      padding-left: 24px;
       font-weight: 700;
       font-size: 16px;
     }
@@ -231,7 +232,7 @@ export default {
     }
   .clear-label{
       all: unset;
-      padding: 24px 24px 0 0;
+      padding: 0 24px 0 0;
       font-weight: 700;
       text-decoration: underline;
       color: #0f4d90;
