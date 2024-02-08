@@ -1,7 +1,6 @@
 
 <template>
   <div class="widget">
-    <label for="service-search">Enter your 8-digit service request number.</label>
     <div class="search">
       <input
         name="service-search"
@@ -14,6 +13,7 @@
         placeholder="For example: 10808044"
         @keyup.enter="requestData()"
       />
+      <label for="service-search">Enter your 8-digit service request number.</label>
       <input
         ref="request-search-bar"
         type="submit"
@@ -24,6 +24,17 @@
       <button v-if="id" class="clear-search-btn" @click="clearSearchBar()">
         <i class="fas fa-times" />
       </button>
+      <div v-if="!serviceRequestData">
+      You can <a href="https://admin.phila.gov/services/property-lots-housing/submit-a-service-request-with-311/">report a variety of problems to 311</a>, including:
+      <ul>
+        <li>Potholes and street damage.</li>
+        <li>Abandoned automobiles.</li>
+        <li>Graffiti.</li>
+        <li>Illegal dumping.</li>
+        <li>Street light outages.</li>
+      </ul>
+      To track an existing service request, enter your service request number in the tool above.
+    </div>
     </div>
     <div v-if="failure && !loading">
       <strong class="error-message">This service request number was not found. If you marked your initial request as private, you won't be able to track it using this tool. Call 311 for an update on private tickets.</strong>
@@ -35,7 +46,18 @@
       <div class="row">
         <div class="columns">
           <section class="tertiary-content">
-            <h3 class="service-id">Service request #{{ serviceRequestData.service_request_id }}</h3>
+          <div class="search-input">
+            <input class="clear-label"
+            value="clear"
+            @click="clearSearchBar()"
+            >
+            <div class="service-request-label">
+              Service Request
+            </div>
+            <div class="service-request">
+              #{{ serviceRequestData.service_request_id }}
+            </div>
+          </div>
              <div class="mlm">
               <strong>Status</strong>
               <p>{{ serviceRequestData.status | capitalize }}</p>
@@ -157,7 +179,8 @@ export default {
     },
 
     clearSearchBar() {
-      this.id = "";
+      this.id = null;
+      this.serviceRequestData = null;
     },
 
     requestData() {
@@ -191,8 +214,42 @@ export default {
   margin: 0 auto;
 }
 
+.search-input{
+      height: 89px;
+      width: 100%;
+      background-color: #daedfe;
+    }
+  .service-request-label {
+      padding: 24px 0 0 24px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+  .service-request {
+      padding-left: 24px;
+      font-size: 20px;
+      font-weight: 200;
+    }
+  .clear-label{
+      all: unset;
+      padding: 24px 24px 0 0;
+      font-weight: 700;
+      text-decoration: underline;
+      color: #0f4d90;
+      float: right;
+      text-align: right;
+      cursor: pointer;
+    }
+
 .search {
   padding-bottom: 1rem;
+  
+  .search-field{
+    margin: 0;
+  }
+
+  label{
+    margin: 7px 0 20px 8px;
+  }
 
   .clear-search-btn {
     position: absolute;
@@ -210,10 +267,6 @@ export default {
 
 .small-hr {
   margin: 17px 10px;
-}
-
-.service-id {
-  margin-top: 0px !important;
 }
 
 .error-message {
