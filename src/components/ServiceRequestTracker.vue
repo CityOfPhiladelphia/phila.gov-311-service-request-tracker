@@ -36,7 +36,12 @@
       To track an existing service request, enter your service request number in the tool above.
     </div>
     </div>
-    <div v-if="failure && !loading">
+    <div v-if="showSearchInput" class="search-input">
+      <button class="clear-label" @click="clearSearchBar()">Clear</button>
+      <div class="service-request-label">Service Request</div>
+      <div class="service-request">#{{ id }}</div>
+    </div>
+    <div v-if="failure && !loading && showSearchInput">
       <strong class="error-message">This service request number was not found. If you marked your initial request as private, you won't be able to track it using this tool. Call 311 for an update on private tickets.</strong>
     </div>
     <div v-if="loading" class="mtm center">
@@ -46,19 +51,7 @@
       <div class="row">
         <div class="columns">
           <section class="tertiary-content">
-          <div class="search-input">
-            <input class="clear-label"
-            value="Clear"
-            @click="clearSearchBar()"
-            >
-            <div class="service-request-label">
-              Service Request
-            </div>
-            <div class="service-request">
-              #{{ serviceRequestData.service_request_id }}
-            </div>
-          </div>
-             <div class="mlm">
+            <div class="mlm">
               <strong>Status</strong>
               <p>{{ serviceRequestData.status | capitalize }}</p>
             </div>
@@ -109,7 +102,8 @@ export default {
       serviceRequestData: null,
       failure: false,
       loading: false,
-      routerQuery: {}
+      routerQuery: {},
+      showSearchInput: false 
     };
   },
 
@@ -180,11 +174,13 @@ export default {
 
     clearSearchBar() {
       this.id = null;
+      this.showSearchInput = false; 
       this.serviceRequestData = null;
     },
 
     requestData() {
       this.loading = true;
+      this.showSearchInput = true; 
       let reqUrl = endpoint + this.id + ".json";
 
       axios
@@ -222,7 +218,6 @@ export default {
     }
   .service-request-label {
       padding-left: 24px;
-      font-weight: 700;
       font-size: 16px;
     }
   .service-request {
@@ -239,6 +234,11 @@ export default {
       float: right;
       text-align: right;
       cursor: pointer;
+    }
+    .clear-label:focus{
+      background-color: transparent;
+      border: 2px solid #0f4d90;
+      color: #0f4d90;
     }
 
 .search {
@@ -271,7 +271,8 @@ export default {
 }
 
 .error-message {
-  color: #cc3000;
+  font-weight: 200;
+  font-size: 20px; 
 }
 
 </style>
