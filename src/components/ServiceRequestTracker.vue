@@ -24,7 +24,7 @@
       <button v-if="id" class="clear-search-btn" @click="clearSearchBar()">
         <i class="fas fa-times" />
       </button>
-      <div v-if="!serviceRequestData">
+      <div v-if="!serviceRequestData && !failure">
       You can <a href="https://admin.phila.gov/services/property-lots-housing/submit-a-service-request-with-311/">report a variety of problems to 311</a>, including:
       <ul>
         <li>Potholes and street damage.</li>
@@ -234,6 +234,10 @@ export default {
       float: right;
       text-align: right;
       cursor: pointer;
+    }
+    .clear-label:hover{
+      background-color: transparent;
+      color: #0f4d90;
     }
     .clear-label:focus{
       background-color: transparent;
