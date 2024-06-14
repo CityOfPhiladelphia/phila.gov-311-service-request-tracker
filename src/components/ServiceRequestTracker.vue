@@ -39,7 +39,7 @@
     <div v-if="showSearchInput" class="search-input">
       <button class="clear-label" @click="clearSearchBar()">Clear</button>
       <div class="service-request-label">Service Request</div>
-      <div class="service-request">#{{ id }}</div>
+      <div class="service-request">#{{ displayID }}</div>
     </div>
     <div v-if="failure && !loading && showSearchInput">
       <strong class="error-message">This service request number was not found. If you marked your initial request as private, you won't be able to track it using this tool. Call 311 for an update on private tickets.</strong>
@@ -99,6 +99,7 @@ export default {
   data: function() {
     return {
       id: "",
+      displayID: "",
       serviceRequestData: null,
       failure: false,
       loading: false,
@@ -189,6 +190,7 @@ export default {
           this.serviceRequestData = response.data[0];
           this.loading = false;
           this.failure = false;
+          this.displayID = this.id;
         })
         .catch(e => {
           this.failure = true;
