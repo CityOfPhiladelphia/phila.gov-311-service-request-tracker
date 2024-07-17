@@ -196,6 +196,7 @@ export default {
           this.failure = true;
           this.loading = false;
           this.serviceRequestData = null;
+          this.displayID = this.id;
           window.console.log(e);
         });
     }
