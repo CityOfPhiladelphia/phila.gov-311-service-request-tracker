@@ -139,7 +139,7 @@ export default {
       if (val.length == 8) {
         this.requestData();
       }
-      this.id = val.replace(/[^0-9]+/g, ''); 
+            this.id = val.replace(/[^0-9]+/g, ''); 
     }
   },
   methods: {
@@ -177,6 +177,7 @@ export default {
       this.id = null;
       this.showSearchInput = false; 
       this.serviceRequestData = null;
+      this.failure = false;
     },
 
     requestData() {
