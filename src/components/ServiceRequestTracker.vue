@@ -1,8 +1,7 @@
 
 <template>
   <div class="widget">
-    <label for="service-search">Enter your 8-digit service request number.</label>
-    <div class="search">
+    <div class="vue-search">
       <input
         name="service-search"
         id="search-bar"
@@ -14,16 +13,27 @@
         placeholder="For example: 10808044"
         @keyup.enter="requestData()"
       />
-      <input
-        ref="request-search-bar"
-        type="submit"
-        class="search-submit"
-        value="Search"
-        @click="requestData()"
-      />
+      <label for="service-search">Enter your 8-digit service request number.</label>
       <button v-if="id" class="clear-search-btn" @click="clearSearchBar()">
         <i class="fas fa-times" />
       </button>
+      <button
+        class="search-submit"
+        @click="requestData()"
+      >
+        <i class="fa-solid fa-magnifying-glass" />
+      </button>
+      <div v-if="!serviceRequestData && !failure">
+      You can <a href="https://admin.phila.gov/services/property-lots-housing/submit-a-service-request-with-311/">report a variety of problems to 311</a>, including:
+      <ul>
+        <li>Potholes and street damage.</li>
+        <li>Abandoned automobiles.</li>
+        <li>Graffiti.</li>
+        <li>Illegal dumping.</li>
+        <li>Street light outages.</li>
+      </ul>
+      To track an existing service request, enter your service request number in the tool above.
+    </div>
     </div>
     <div v-if="failure && !loading">
       <strong class="error-message">This service request number was not found. If you marked your initial request as private, you won't be able to track it using this tool. Call 311 for an update on private tickets.</strong>
@@ -191,8 +201,74 @@ export default {
   margin: 0 auto;
 }
 
-.search {
+.search-input{
+      padding: 24px 0 24px 0;
+      width: 100%;
+      background-color: #daedfe;
+      margin-bottom: 24px;
+    }
+  .service-request-label {
+      padding-left: 24px;
+      font-size: 16px;
+    }
+  .service-request {
+      padding-left: 24px;
+      font-size: 20px;
+      font-weight: 200;
+    }
+  .clear-label{
+      all: unset;
+      padding: 0 24px 0 0;
+      font-weight: 700;
+      text-decoration: underline;
+      color: #0f4d90;
+      float: right;
+      text-align: right;
+      cursor: pointer;
+    }
+    .clear-label:hover{
+      background-color: transparent;
+      color: #0f4d90;
+    }
+    .clear-label:focus{
+      background-color: transparent;
+      border: 2px solid #0f4d90;
+      color: #0f4d90;
+    }
+
+.vue-search {
   padding-bottom: 1rem;
+  width: 100%;
+  position: relative;
+
+  .search-field{
+    margin: 0;
+    min-height: 3.8rem;
+    border: 2px solid #0f4d90;
+    background: white;
+  }
+
+  .search-submit{ 
+    padding: 0.4rem;
+    font-size: 2rem;
+    font-weight: 400;
+    background: #0f4d90;
+    color: white;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3.8rem;
+    height: 3.8rem;
+    cursor: pointer;
+  }
+
+  .fa-magnifying-glass{
+    font-weight: normal;
+  }
+
+  label{
+    margin: 7px 0 20px 8px;
+  }
 
   .clear-search-btn {
     position: absolute;
@@ -202,9 +278,12 @@ export default {
     font-size: 20px;
     background-color: #fff;
     opacity: 0.8;
-    z-index: 999;
     cursor: pointer;
     color: rgba(60, 60, 60, 0.5);
+      &:hover {
+      background: transparent;
+      color: black;
+    }
   }
 }
 
