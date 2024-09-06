@@ -1,7 +1,7 @@
 
 <template>
   <div class="widget">
-    <div class="search">
+    <div class="vue-search">
       <input
         name="service-search"
         id="search-bar"
@@ -14,15 +14,14 @@
         @keyup.enter="requestData()"
       />
       <label for="service-search">Enter your 8-digit service request number.</label>
-      <input
-        ref="request-search-bar"
-        type="submit"
-        class="search-submit"
-        value="Search"
-        @click="requestData()"
-      />
       <button v-if="id" class="clear-search-btn" @click="clearSearchBar()">
         <i class="fas fa-times" />
+      </button>
+      <button
+        class="search-submit"
+        @click="requestData()"
+      >
+        <i class="fa-solid fa-magnifying-glass" />
       </button>
       <div v-if="!serviceRequestData && !failure">
       You can <a href="https://admin.phila.gov/services/property-lots-housing/submit-a-service-request-with-311/">report a variety of problems to 311</a>, including:
@@ -249,11 +248,34 @@ export default {
       color: #0f4d90;
     }
 
-.search {
+.vue-search {
   padding-bottom: 1rem;
-  
+  width: 100%;
+  position: relative;
+
   .search-field{
     margin: 0;
+    min-height: 3.8rem;
+    border: 2px solid #0f4d90;
+    background: white;
+  }
+
+  .search-submit{ 
+    padding: 0.4rem;
+    font-size: 2rem;
+    font-weight: 400;
+    background: #0f4d90;
+    color: white;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3.8rem;
+    height: 3.8rem;
+    cursor: pointer;
+  }
+
+  .fa-magnifying-glass{
+    font-weight: normal;
   }
 
   label{
@@ -268,9 +290,12 @@ export default {
     font-size: 20px;
     background-color: #fff;
     opacity: 0.8;
-    z-index: 999;
     cursor: pointer;
     color: rgba(60, 60, 60, 0.5);
+      &:hover {
+      background: transparent;
+      color: black;
+    }
   }
 }
 
