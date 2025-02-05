@@ -1,6 +1,6 @@
 
 <template>
-  <div class="row widget">
+  <div class="row">
     <div class="vue-search">
       <input
         name="service-search"
@@ -208,9 +208,6 @@ export default {
 </script>
 
 <style lang="scss">
-.widget {
-  max-width: 50rem;
-}
 
 .search-input{
       padding: 24px 0 24px 0;
